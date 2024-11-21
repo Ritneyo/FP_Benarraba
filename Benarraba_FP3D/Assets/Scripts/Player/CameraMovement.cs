@@ -40,7 +40,8 @@ public class CameraMovement : MonoBehaviour
         horizontalRotation -= lookInput.x * lookSensibility;
         verticalRotation -= lookInput.y * lookSensibility;
         verticalRotation = Mathf.Clamp(verticalRotation, -maxLookDownAngle, maxLookUpAngle);
-        transform.localRotation = Quaternion.Euler(verticalRotation, -horizontalRotation, 0f);
+        transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+        transform.parent.localRotation = Quaternion.Euler(0f, -horizontalRotation, 0f);
     }
     #endregion
 }
