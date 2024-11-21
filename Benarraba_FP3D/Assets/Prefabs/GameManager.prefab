@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4606516558569309460
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3785033575349685484}
+  - component: {fileID: 5443017026892858725}
+  - component: {fileID: 1044691104}
+  - component: {fileID: 1044691105}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3785033575349685484
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4606516558569309460}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 173.65239, y: 253.32999, z: -129.42693}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5443017026892858725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4606516558569309460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 862c88e884b4c244f9014a04775de857, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 100000
+  initalScore: 0
+  attemps: 3
+  hintsDictionary: {fileID: 0}
+  playAgain: 0
+  saveDataPreset: {fileID: 11400000, guid: 778b4d53b76c19040a178fd9bcf77e32, type: 2}
+  presets:
+  - {fileID: 11400000, guid: 6b9f298e4bea9294c832a6343aa307ad, type: 2}
+  - {fileID: 11400000, guid: 8e69c28f9f89d444c9fea7c4f3981982, type: 2}
+  - {fileID: 11400000, guid: 649e61d4a41dc184890ed89af1a951fe, type: 2}
+  - {fileID: 11400000, guid: 179aaaf077e8b4a4c9ace302778df184, type: 2}
+  - {fileID: 11400000, guid: 3a81e0189de65bf4ab15db6fe816e2da, type: 2}
+  - {fileID: 11400000, guid: 0008362097a6c7d41bb4b8c0a28f0753, type: 2}
+  - {fileID: 11400000, guid: b26f1f46927b9db48831a2098e9cb6b1, type: 2}
+  - {fileID: 11400000, guid: 9d682da9a1ed050428d94eee3a042f08, type: 2}
+  - {fileID: 11400000, guid: 6cbda2e893ae3cc488fa6d8d11293aec, type: 2}
+  - {fileID: 11400000, guid: 63f18a05e70627144944f13ccc864d58, type: 2}
+  presetsList: []
+  posSpawn: {fileID: 0}
+  civilGuard: {fileID: 0}
+  mayorObject: {fileID: 0}
+  BDead: {fileID: 0}
+  pnlLoading: {fileID: 0}
+  clock: {fileID: 0}
+  notepad: {fileID: 0}
+  padlock: {fileID: 0}
+  teclaNotepad: {fileID: 0}
+--- !u!114 &1044691104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4606516558569309460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 410fa83ab42daf94da65c98ae4eb9520, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeDay: 0
+  transition: 0
+  delaySave: 200
+  fullDayLength: 600
+  BDead: {fileID: 0}
+  animator: {fileID: 0}
+  TxtMuerto: {fileID: 0}
+  PosInicial: {fileID: 0}
+  camNight: {fileID: 0}
+  hour: 420
+  minuteNeedle: {fileID: 0}
+  hourNeedle: {fileID: 0}
+--- !u!114 &1044691105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4606516558569309460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b1ad0552aa40c440934b7c82e9eb029, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containerNPCs: {fileID: 0}
+  takenRols: 
