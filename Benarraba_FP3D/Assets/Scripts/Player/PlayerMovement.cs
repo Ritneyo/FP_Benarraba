@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,6 +18,11 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveInput;
     #endregion
     #region Unity methods
+    private void Awake()
+    {
+        rb.maxLinearVelocity = moveForce;
+    }
+
     private void Update()
     {
         Move();
@@ -25,6 +31,13 @@ public class PlayerMovement : MonoBehaviour
     public void Move()
     {
         moveInput = playerInput.actions["Movement"].ReadValue<Vector2>();
-        rb.AddForce(new Vector3(moveInput.x, 0f, moveInput.y) * moveForce);
+
+        if (moveInput != Vector2.zero)
+        {
+            Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
+            moveDirection = transform.TransformDirection(moveDirection);
+
+            rb.AddForce(moveDirection * moveForce, ForceMode.Force);
+        }
     }
 }
