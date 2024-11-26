@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     #region Unity methods
     private void Awake()
     {
-        rb.maxLinearVelocity = moveForce;
+        rb.maxLinearVelocity = moveForce/4;
     }
 
     private void Update()
@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
         Move();
     }
     #endregion
+    #region My methods
     public void Move()
     {
         moveInput = playerInput.actions["Movement"].ReadValue<Vector2>();
@@ -40,4 +41,5 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(moveDirection * moveForce, ForceMode.Force);
         }
     }
+    #endregion
 }
