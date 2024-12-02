@@ -1,13 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     #region Variables
+    //Instance
     public static GameManager Instance;
+
+    [Header("MainMenu")]
+    //Objects
+
+    //Parameters
+    private float onAnyPressedMoveSpeed;
+    [SerializeField] private float onAnyPressedLimitSpeed;
+    [SerializeField] private float onAnyPressedIncrementSpeed;
+
+    //States
+    private bool anyPressed;
+    private bool speedSwitchUp;
     #endregion
     #region Unity methods
     private void Awake()
@@ -23,6 +37,15 @@ public class GameManager : MonoBehaviour
         }
 
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        //Initializing
+        anyPressed = false;
+        speedSwitchUp = true;
+    }
+
+    private void Update()
+    {
+        CheckIfAnyKeyPressed();
     }
     #endregion
     #region SceneManager methods
@@ -39,6 +62,19 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(sceneIndex);
     }
     #endregion
+    #region Checking methods
+    private void CheckIfAnyKeyPressed()
+    {
+        if (!anyPressed && SceneManager.GetActiveScene().buildIndex == GameConstants.sceneMainMenu &&
+            (Keyboard.current.anyKey.wasPressedThisFrame ||
+            Mouse.current.leftButton.wasPressedThisFrame ||
+            Mouse.current.rightButton.wasPressedThisFrame))
+        {
+            anyPressed = true;
+            StartCoroutine(MoveUIElements());
+        }
+    }
+    #endregion
     #region MainMenu methods
     /// <summary>
     /// Sale del juego
@@ -47,6 +83,33 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Application quit");
         Application.Quit();
+    }
+
+    private IEnumerator MoveUIElements()
+    {
+        yield return null;
+
+        GameObject titleAndAnyPress = GameObject.Find(GameConstants.mainMenuTitleAndAnyPress);
+        GameObject buttonsContainer = GameObject.Find(GameConstants.mainMenuVerticalButtonContainer);
+
+        onAnyPressedMoveSpeed = onAnyPressedLimitSpeed;
+
+        while (buttonsContainer.transform.localPosition.y < 0)
+        {
+            titleAndAnyPress.transform.localPosition = titleAndAnyPress.transform.localPosition + Vector3.up * onAnyPressedMoveSpeed * Time.deltaTime;
+            buttonsContainer.transform.localPosition = buttonsContainer.transform.localPosition + Vector3.up * onAnyPressedMoveSpeed * Time.deltaTime;
+
+            //if (speedSwitchUp) onAnyPressedMoveSpeed += onAnyPressedIncrementSpeed;
+            onAnyPressedMoveSpeed -= onAnyPressedIncrementSpeed;
+            //if (speedSwitchUp && onAnyPressedMoveSpeed >= onAnyPressedLimitSpeed) speedSwitchUp = false;
+            //if (!speedSwitchUp && onAnyPressedMoveSpeed <= 0) speedSwitchUp = true;
+
+            Debug.Log(onAnyPressedMoveSpeed);
+
+            yield return null;
+        }
+
+        yield return null;
     }
 
     private void CheckButtonListeners(int sceneIndex)
