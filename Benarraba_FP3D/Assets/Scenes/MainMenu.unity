@@ -397,7 +397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32e1a7f5f97a89447b52b893bab8afe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onAnyPressedLimitSpeed: 1126
+  onAnyPressedLimitSpeed: 1100
   onAnyPressedIncrementSpeed: 10
 --- !u!1 &910144895
 GameObject:
