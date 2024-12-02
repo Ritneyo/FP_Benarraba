@@ -15,9 +15,7 @@ public class GameManager : MonoBehaviour
     //Objects
 
     //Parameters
-    private float onAnyPressedMoveSpeed;
-    [SerializeField] private float onAnyPressedLimitSpeed;
-    [SerializeField] private float onAnyPressedIncrementSpeed;
+    [SerializeField] private float onAnyPressedMoveSpeed;
 
     //States
     private bool anyPressed;
@@ -92,20 +90,10 @@ public class GameManager : MonoBehaviour
         GameObject titleAndAnyPress = GameObject.Find(GameConstants.mainMenuTitleAndAnyPress);
         GameObject buttonsContainer = GameObject.Find(GameConstants.mainMenuVerticalButtonContainer);
 
-        onAnyPressedMoveSpeed = onAnyPressedLimitSpeed;
-
         while (buttonsContainer.transform.localPosition.y < 0)
         {
             titleAndAnyPress.transform.localPosition = titleAndAnyPress.transform.localPosition + Vector3.up * onAnyPressedMoveSpeed * Time.deltaTime;
             buttonsContainer.transform.localPosition = buttonsContainer.transform.localPosition + Vector3.up * onAnyPressedMoveSpeed * Time.deltaTime;
-
-            //if (speedSwitchUp) onAnyPressedMoveSpeed += onAnyPressedIncrementSpeed;
-            onAnyPressedMoveSpeed -= onAnyPressedIncrementSpeed;
-            //if (speedSwitchUp && onAnyPressedMoveSpeed >= onAnyPressedLimitSpeed) speedSwitchUp = false;
-            //if (!speedSwitchUp && onAnyPressedMoveSpeed <= 0) speedSwitchUp = true;
-
-            Debug.Log(onAnyPressedMoveSpeed);
-
             yield return null;
         }
 
