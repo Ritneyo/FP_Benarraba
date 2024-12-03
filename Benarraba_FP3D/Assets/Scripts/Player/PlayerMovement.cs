@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
@@ -17,14 +18,11 @@ public class PlayerMovement : MonoBehaviour
     //MoveInput Vector2
     private Vector2 moveInput;
 
-    //Parameters
-    private bool accelUp = false;
-    private bool accelDown = false;
     #endregion
     #region Unity methods
-    private void Awake()
+    private void Start()
     {
-        rb.maxLinearVelocity = moveForce / 8;
+        Cursor.visible = false;
     }
 
     private void Update()
@@ -42,14 +40,12 @@ public class PlayerMovement : MonoBehaviour
             Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
             moveDirection = transform.TransformDirection(moveDirection);
 
-            rb.AddForce(moveDirection * moveForce, ForceMode.Force);
+            rb.velocity = new Vector3(moveDirection.x * moveForce, rb.velocity.y, moveDirection.z * moveForce);
         }
-        else
-        {
-            rb.maxLinearVelocity = moveForce / 8;
-            new WaitForSecondsRealtime(0.5f);
-            rb.maxLinearVelocity = moveForce / 4;
-        } 
+        //else
+        //{
+        //    rb.velocity = new Vector3(rb.velocity.x * 0.9f, rb.velocity.y, rb.velocity.z * 0.9f);
+        //} 
     }
     #endregion
 }

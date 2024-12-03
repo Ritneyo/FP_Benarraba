@@ -5,27 +5,28 @@ using UnityEngine.InputSystem;
 
 public class PlayerRun : MonoBehaviour
 {
-    private Rigidbody rb;
+    #region Variables
     private PlayerMovement playerMovement;
-    private float oriMoveForce;
-
+    #endregion
+    #region Unity methods
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
         playerMovement = GetComponent<PlayerMovement>();
     }
-
+    #endregion
+    #region Run methods
     public void Run(InputAction.CallbackContext callbackContext)
     {
         if (callbackContext.performed)
         {
-            rb.maxLinearVelocity = playerMovement.moveForce / 2;
+            playerMovement.moveForce *= 1.5f;
             Debug.Log("Start run");
         }
         else if (callbackContext.canceled)
         {
-            rb.maxLinearVelocity = playerMovement.moveForce / 4;
+            playerMovement.moveForce /= 1.5f;
             Debug.Log("Stop run");
         }
     }
+    #endregion
 }
