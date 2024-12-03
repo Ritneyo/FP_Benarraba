@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
@@ -11,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private Transform groundDetection;
 
     [Header("Player stats")]
     public float moveForce = 5f;
@@ -18,6 +15,9 @@ public class PlayerMovement : MonoBehaviour
     //MoveInput Vector2
     private Vector2 moveInput;
 
+    //State
+    [HideInInspector] public bool isGrounded;
+    [HideInInspector] public bool isJumping;
     #endregion
     #region Unity methods
     private void Start()
@@ -27,25 +27,28 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        GroundDetect();
         Move();
     }
     #endregion
     #region My methods
+    public void GroundDetect()
+    {
+        if (GameConstants.GeneralDetectionUnique(groundDetection.transform.position, Vector3.down, 0.1f))
+            isGrounded = true;
+        else isGrounded = false;
+    }
     public void Move()
     {
         moveInput = playerInput.actions["Movement"].ReadValue<Vector2>();
 
-        if (moveInput != Vector2.zero)
+        if (moveInput != Vector2.zero && isGrounded && !isJumping)
         {
             Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
             moveDirection = transform.TransformDirection(moveDirection);
 
             rb.velocity = new Vector3(moveDirection.x * moveForce, rb.velocity.y, moveDirection.z * moveForce);
         }
-        //else
-        //{
-        //    rb.velocity = new Vector3(rb.velocity.x * 0.9f, rb.velocity.y, rb.velocity.z * 0.9f);
-        //} 
     }
     #endregion
 }

@@ -37,10 +37,10 @@ public static class GameConstants
         return false;
     }
 
-    public static bool GeneralDetectionUnique(Vector3 rOPosition, Vector3 rDirection, float rDistance/*, string layer*/)
+    public static bool GeneralDetectionUnique(Vector3 rOPosition, Vector3 rDirection, float rDistance)
     {
         Debug.DrawRay(rOPosition, rDirection * rDistance, Color.yellow);
-        return Physics.Raycast(rOPosition, rDirection, rDistance/*, LayerMask.GetMask(layer)*/);
+        return Physics.Raycast(rOPosition, rDirection, rDistance);
     }
     #endregion
 }
