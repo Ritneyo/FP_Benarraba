@@ -41,6 +41,11 @@ public class GameManager : MonoBehaviour
         speedSwitchUp = true;
     }
 
+    private void Start()
+    {
+        Cursor.visible = false;
+    }
+
     private void Update()
     {
         CheckIfAnyKeyPressed();
