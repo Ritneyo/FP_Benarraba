@@ -12,15 +12,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private PlayerInput playerInput;
 
     [Header("Player stats")]
-    [SerializeField] private float moveForce = 5f;
+    public float moveForce = 5f;
 
     //MoveInput Vector2
     private Vector2 moveInput;
+
+    //Parameters
+    private bool accelUp = false;
+    private bool accelDown = false;
     #endregion
     #region Unity methods
     private void Awake()
     {
-        rb.maxLinearVelocity = moveForce/4;
+        rb.maxLinearVelocity = moveForce / 8;
     }
 
     private void Update()
@@ -40,6 +44,12 @@ public class PlayerMovement : MonoBehaviour
 
             rb.AddForce(moveDirection * moveForce, ForceMode.Force);
         }
+        else
+        {
+            rb.maxLinearVelocity = moveForce / 8;
+            new WaitForSecondsRealtime(0.5f);
+            rb.maxLinearVelocity = moveForce / 4;
+        } 
     }
     #endregion
 }
