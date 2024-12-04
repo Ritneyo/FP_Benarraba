@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
 
     //State
     [HideInInspector] public bool isGrounded;
+    [HideInInspector] public bool isWalking;
+    [HideInInspector] public bool isRunning;
     [HideInInspector] public bool isJumping;
     #endregion
     #region Unity methods
@@ -44,11 +46,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (moveInput != Vector2.zero && isGrounded && !isJumping)
         {
+            isWalking = true;
+
             Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
             moveDirection = transform.TransformDirection(moveDirection);
 
             rb.velocity = new Vector3(moveDirection.x * moveForce, rb.velocity.y, moveDirection.z * moveForce);
         }
+        else isWalking = false;
     }
     #endregion
 }
