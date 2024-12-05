@@ -28,9 +28,14 @@ public class PlayerClimb : MonoBehaviour
         {
             raycastHitClimb = GameConstants.RaycastInformation(transform.position, transform.forward, playerCapsuleCollider.radius + 0.5f);
 
-            playerCapsuleCollider.transform.position += playerCapsuleCollider.transform.forward * (raycastHitClimb.distance - playerCapsuleCollider.radius);
+            playerCapsuleCollider.transform.position += playerCapsuleCollider.transform.forward * (raycastHitClimb.distance - playerCapsuleCollider.radius - 0.1f);
 
-            //raycastHitClimb.collider.transform
+            Debug.Log(raycastHitClimb.collider.GetComponent<ClimbWall>().upperTransform.position.y);
+
+            if (raycastHitClimb.collider.GetComponent<ClimbWall>().upperTransform.position.y - transform.position.y < 5)
+            {
+                playerCapsuleCollider.GetComponent<Rigidbody>().AddForce(new Vector3(0, 1000, 0));
+            }
         }
     }
     #endregion
