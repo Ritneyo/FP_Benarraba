@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public static class GameConstants
 {
@@ -41,6 +43,26 @@ public static class GameConstants
     {
         Debug.DrawRay(rOPosition, rDirection * rDistance, Color.yellow);
         return Physics.Raycast(rOPosition, rDirection, rDistance);
+    }
+    
+    public static bool GeneralDetectionUnique(Vector3 rOPosition, Vector3 rDirection, float rDistance, string mask)
+    {
+        Debug.DrawRay(rOPosition, rDirection * rDistance, Color.yellow);
+        return Physics.Raycast(rOPosition, rDirection, rDistance, LayerMask.GetMask(mask));
+    }
+
+    public static RaycastHit RaycastInformation(Vector3 rOPosition, Vector3 rDirection, float rDistance)
+    {
+        RaycastHit hit;
+        Physics.Raycast(rOPosition, rDirection,out hit, rDistance);
+        return hit;
+    }
+    
+    public static RaycastHit RaycastInformation(Vector3 rOPosition, Vector3 rDirection, float rDistance, string mask)
+    {
+        RaycastHit hit;
+        Physics.Raycast(rOPosition, rDirection,out hit, rDistance, LayerMask.GetMask(mask));
+        return hit;
     }
     #endregion
 }
