@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public bool isWalking;
     [HideInInspector] public bool isRunning;
     [HideInInspector] public bool isJumping;
+    [HideInInspector] public bool isClimbing;
     #endregion
     #region Unity methods
     private void Start()
@@ -36,7 +37,11 @@ public class PlayerMovement : MonoBehaviour
     #region My methods
     public void GroundDetect()
     {
-        if (GameConstants.GeneralDetectionUnique(groundDetection.transform.position, Vector3.down, 0.1f))
+        if (GameConstants.GeneralDetectionUnique(groundDetection.transform.position, Vector3.down, 0.1f) ||
+            GameConstants.GeneralDetectionUnique(groundDetection.transform.position + Vector3.forward * 0.3f, Vector3.down, 0.1f) ||
+            GameConstants.GeneralDetectionUnique(groundDetection.transform.position + Vector3.back * 0.3f, Vector3.down, 0.1f) ||
+            GameConstants.GeneralDetectionUnique(groundDetection.transform.position + Vector3.right * 0.3f, Vector3.down, 0.1f) ||
+            GameConstants.GeneralDetectionUnique(groundDetection.transform.position + Vector3.left * 0.3f, Vector3.down, 0.1f))
             isGrounded = true;
         else isGrounded = false;
     }
@@ -44,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
     {
         moveInput = playerInput.actions["Movement"].ReadValue<Vector2>();
 
-        if (moveInput != Vector2.zero && isGrounded && !isJumping)
+        if (moveInput != Vector2.zero && isGrounded && !isJumping && !isClimbing)
         {
             isWalking = true;
 

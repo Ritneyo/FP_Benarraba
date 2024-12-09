@@ -3,6 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class CustomGravity : MonoBehaviour
 {
+    private PlayerMovement mMovement;
+
     // Gravity Scale editable on the inspector
     // providing a gravity scale per object
 
@@ -21,9 +23,17 @@ public class CustomGravity : MonoBehaviour
         m_rb.useGravity = false;
     }
 
+    private void Start()
+    {
+        mMovement = GetComponent<PlayerMovement>();
+    }
+
     void FixedUpdate()
     {
         Vector3 gravity = globalGravity * gravityScale * Vector3.up;
-        m_rb.AddForce(gravity, ForceMode.Acceleration);
+        if (!mMovement.isClimbing)
+        {
+            m_rb.AddForce(gravity, ForceMode.Acceleration);
+        }
     }
 }
