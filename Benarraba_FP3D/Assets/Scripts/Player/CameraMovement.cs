@@ -7,6 +7,9 @@ using UnityEngine.InputSystem;
 public class CameraMovement : MonoBehaviour
 {
     #region Variables
+    [Header("Components")]
+    [SerializeField] private PlayerMovement playerMovement;
+
     [Header("Camera parameters")]
     [SerializeField] private float lookSensibility;
     private float horizontalRotation = 0;
@@ -18,9 +21,9 @@ public class CameraMovement : MonoBehaviour
     private Vector2 lookInput;
     #endregion
     #region Unity methods
-    private void Awake()
+    private void Start()
     {
-        
+        playerMovement = GetComponent<PlayerMovement>();    
     }
 
     private void Update()
@@ -36,12 +39,15 @@ public class CameraMovement : MonoBehaviour
 
     private void LookAround()
     {
-        //Vertical with limits
-        horizontalRotation -= lookInput.x * lookSensibility;
-        verticalRotation -= lookInput.y * lookSensibility;
-        verticalRotation = Mathf.Clamp(verticalRotation, -maxLookDownAngle, maxLookUpAngle);
-        transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
-        transform.parent.localRotation = Quaternion.Euler(0f, -horizontalRotation, 0f);
+        if (!GameManager.Instance.inIntro && !GameManager.Instance.inOutro)
+        {
+            //Vertical with limits
+            horizontalRotation -= lookInput.x * lookSensibility;
+            verticalRotation -= lookInput.y * lookSensibility;
+            verticalRotation = Mathf.Clamp(verticalRotation, -maxLookDownAngle, maxLookUpAngle);
+            transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+            transform.parent.localRotation = Quaternion.Euler(0f, -horizontalRotation, 0f);
+        }
     }
     #endregion
 }

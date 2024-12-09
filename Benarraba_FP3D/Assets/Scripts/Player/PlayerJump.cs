@@ -34,10 +34,13 @@ public class PlayerJump : MonoBehaviour
     #region Jump methods
     public void Jump(InputAction.CallbackContext callbackContext)
     {
-        if (callbackContext.performed && !playerMovement.isJumping)
+        if (!GameManager.Instance.inIntro && !GameManager.Instance.inOutro)
         {
-            playerMovement.isJumping = true;
-            rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
+            if (callbackContext.performed && !playerMovement.isJumping)
+            {
+                playerMovement.isJumping = true;
+                rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
+            }
         }
     }
     #endregion

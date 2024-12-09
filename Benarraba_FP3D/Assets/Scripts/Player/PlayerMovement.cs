@@ -47,18 +47,21 @@ public class PlayerMovement : MonoBehaviour
     }
     public void Move()
     {
-        moveInput = playerInput.actions["Movement"].ReadValue<Vector2>();
-
-        if (moveInput != Vector2.zero && isGrounded && !isJumping && !isClimbing)
+        if (!GameManager.Instance.inIntro && !GameManager.Instance.inOutro)
         {
-            isWalking = true;
+            moveInput = playerInput.actions["Movement"].ReadValue<Vector2>();
 
-            Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
-            moveDirection = transform.TransformDirection(moveDirection);
+            if (moveInput != Vector2.zero && isGrounded && !isJumping && !isClimbing)
+            {
+                isWalking = true;
 
-            rb.velocity = new Vector3(moveDirection.x * moveForce, rb.velocity.y, moveDirection.z * moveForce);
+                Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
+                moveDirection = transform.TransformDirection(moveDirection);
+
+                rb.velocity = new Vector3(moveDirection.x * moveForce, rb.velocity.y, moveDirection.z * moveForce);
+            }
+            else isWalking = false;
         }
-        else isWalking = false;
     }
     #endregion
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -19,7 +20,18 @@ public class GameManager : MonoBehaviour
 
     //States
     private bool anyPressed;
-    private bool speedSwitchUp;
+
+    [Header("Benarraba")]
+    //Objects
+    private Animator baltasarAnimator;
+    private Animator fadeInAnimator;
+    private Animator fadeOutAnimator;
+    private Animator pDialogs;
+
+    //States
+    public bool inIntro;
+    private bool inIntroStart;
+    public bool inOutro;
     #endregion
     #region Unity methods
     private void Awake()
@@ -38,7 +50,9 @@ public class GameManager : MonoBehaviour
 
         //Initializing
         anyPressed = false;
-        speedSwitchUp = true;
+        inIntro = false;
+        inIntroStart = false;
+        inOutro = false;
     }
 
     private void Start()
@@ -49,14 +63,14 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         CheckIfAnyKeyPressed();
+        Intro();
     }
     #endregion
     #region SceneManager methods
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log($"La escena {scene.name} ha terminado de cargar");
-
-        CheckButtonListeners(SceneManager.GetActiveScene().buildIndex);
+        CheckWhatSceneIsLoaded(scene);
     }
 
     private void LoadSceneAsync(int sceneIndex)
@@ -66,6 +80,20 @@ public class GameManager : MonoBehaviour
     }
     #endregion
     #region Checking methods
+    private void CheckWhatSceneIsLoaded(Scene scene)
+    {
+        switch (scene.buildIndex)
+        {
+            case GameConstants.sceneMainMenu:
+                CheckButtonListeners(SceneManager.GetActiveScene().buildIndex);
+                break;
+            case GameConstants.sceneBenarraba:
+                BenarrabaSceneInstanceElements();
+                StartCoroutine(GameConstants.FadeInOut(fadeInAnimator, true));
+                break;
+        }
+    }
+
     private void CheckIfAnyKeyPressed()
     {
         if (!anyPressed && SceneManager.GetActiveScene().buildIndex == GameConstants.sceneMainMenu &&
@@ -137,6 +165,75 @@ public class GameManager : MonoBehaviour
                 }
                 break;
         }
+    }
+    #endregion
+    #region Benarraba methods
+    private void BenarrabaSceneInstanceElements()
+    {
+        GameObject.Find(GameConstants.playerNameAndTag);
+        fadeInAnimator = GameObject.Find(GameConstants.benarrabaFadeInPanel).GetComponent<Animator>();
+        //fadeOutAnimator = GameObject.Find(GameConstants.benarrabaFadeOutPanel).GetComponent<Animator>();
+        pDialogs = GameObject.Find(GameConstants.benarrabaPDialog).GetComponent<Animator>();
+        baltasarAnimator = GameObject.Find(GameConstants.benarrabaBaltasarName).GetComponent<Animator>();
+
+        inIntro = true;
+    }
+
+    public void Intro()
+    {
+        if (fadeInAnimator != null && !fadeInAnimator.gameObject.activeSelf && !inIntroStart)
+        {
+            inIntroStart = true;
+            StartCoroutine(SpeechIntro());
+        }
+    }
+
+    private IEnumerator SpeechIntro()
+    {
+        yield return null;
+
+        pDialogs.enabled = true;
+
+        while (pDialogs.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.99f) yield return null;
+
+        pDialogs.enabled = false;
+
+        TMP_Text dialogText = pDialogs.transform.GetChild(0).GetComponent<TMP_Text>();
+        dialogText.text = $"Gaspar: {GameConstants.gasparText1}";
+
+        yield return new WaitForSecondsRealtime(0.2f);
+        while (!Keyboard.current.eKey.wasPressedThisFrame) yield return null;
+
+        dialogText.text = $"Baltasar: {GameConstants.baltasarText1}";
+
+        yield return new WaitForSecondsRealtime(0.2f);
+        while (!Keyboard.current.eKey.wasPressedThisFrame) yield return null;
+
+        baltasarAnimator.enabled = true;
+        dialogText.text = $"Baltasar: {GameConstants.baltasarText2}";
+
+        yield return new WaitForSecondsRealtime(0.2f);
+        while (!Keyboard.current.eKey.wasPressedThisFrame) yield return null;
+
+        baltasarAnimator.enabled = false;
+        dialogText.text = $"Baltasar: {GameConstants.melchorText1}";
+
+        yield return new WaitForSecondsRealtime(0.2f);
+        while (!Keyboard.current.eKey.wasPressedThisFrame) yield return null;
+
+        Debug.Log("Intro fin");
+
+        dialogText.text = "";
+        pDialogs.enabled = true;
+        pDialogs.Play(GameConstants.benarrabaPDialogDespawn, 0, 0);
+
+        yield return new WaitForSecondsRealtime(0.1f);
+        while (pDialogs.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.99f) yield return null;
+
+        pDialogs.enabled = false;
+        inIntro = false;
+
+        yield return null;
     }
     #endregion
     #region UI methods
