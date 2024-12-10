@@ -36,6 +36,7 @@ public class PlayerClimb : MonoBehaviour
 
             if (raycastHitClimb.collider.GetComponent<ClimbWall>().upperTransform.position.y - transform.position.y < climbMinDistance)
             {
+                Debug.Log("Climb puto");
                 playerMovement.isClimbing = true;
                 rb.velocity = Vector3.zero;
                 StartCoroutine(PerformClimb(raycastHitClimb.collider.GetComponent<ClimbWall>().upperTransform.position.y - transform.position.y + 1,
