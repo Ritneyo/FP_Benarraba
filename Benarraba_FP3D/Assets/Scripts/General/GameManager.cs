@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour
 
     [Header("MainMenu")]
     //Objects
+    private GameObject menuPanel;
+    private GameObject menuPanelControls;
+    private Animator fadeInAnimatorMainMenu;
+    private Animator fadeOutAnimatorMainMenu;
 
     //Parameters
     [SerializeField] private float onAnyPressedMoveSpeed;
@@ -46,6 +50,11 @@ public class GameManager : MonoBehaviour
     private bool inIntroStart;
     public bool inOutro;
     public bool inOutroStart;
+
+    [Header("Credits")]
+    //Objects
+    private Animator fadeInAnimatorCredits;
+    private Animator fadeOutAnimatorCredits;
     #endregion
     #region Unity methods
     private void Awake()
@@ -77,7 +86,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        CheckIfAnyKeyPressed();
+        CheckIfAnyKeyPressedMinMenu();
         Intro();
         Outro();
     }
@@ -87,11 +96,23 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log($"La escena {scene.name} ha terminado de cargar");
         CheckWhatSceneIsLoaded(scene);
+
+        if (AudioManager.Instance != null) AudioManager.Instance.GetSources();
     }
 
     private void LoadSceneAsync(int sceneIndex)
     {
-        Debug.Log("Play");
+        SceneManager.LoadScene(sceneIndex);
+    }
+    
+    private IEnumerator LoadSceneAsyncWithFadeOut(int sceneIndex)
+    {
+        yield return null;
+
+        StartCoroutine(GameConstants.FadeInOut(fadeOutAnimatorMainMenu, false));
+
+        yield return new WaitForSecondsRealtime(3f);
+
         SceneManager.LoadScene(sceneIndex);
     }
     #endregion
@@ -102,15 +123,27 @@ public class GameManager : MonoBehaviour
         {
             case GameConstants.sceneMainMenu:
                 CheckButtonListeners(SceneManager.GetActiveScene().buildIndex);
+                menuPanel = GameObject.Find(GameConstants.mainMenuBenarrabaMainMenuPanel);
+                menuPanelControls = GameObject.Find(GameConstants.mainMenuBenarrabaControlsPanel);
+                menuPanelControls.SetActive(false);
+                fadeInAnimatorMainMenu = GameObject.Find(GameConstants.benarrabaFadeInPanel).GetComponent<Animator>();
+                fadeOutAnimatorMainMenu = GameObject.Find(GameConstants.benarrabaFadeOutPanel).GetComponent<Animator>();
+                fadeOutAnimatorMainMenu.gameObject.SetActive(false);
+                StartCoroutine(GameConstants.FadeInOut(fadeInAnimatorMainMenu, true));
                 break;
             case GameConstants.sceneBenarraba:
                 BenarrabaSceneInstanceElements();
                 StartCoroutine(GameConstants.FadeInOut(fadeInAnimator, true));
                 break;
+            case GameConstants.sceneCredits:
+                fadeInAnimatorCredits = GameObject.Find(GameConstants.benarrabaFadeInPanel).GetComponent<Animator>();
+                fadeOutAnimatorCredits = GameObject.Find(GameConstants.benarrabaFadeOutPanel).GetComponent<Animator>();
+                StartCoroutine(CreditsPerform());
+                break;
         }
     }
 
-    private void CheckIfAnyKeyPressed()
+    private void CheckIfAnyKeyPressedMinMenu()
     {
         if (!anyPressed && SceneManager.GetActiveScene().buildIndex == GameConstants.sceneMainMenu &&
             (Keyboard.current.anyKey.wasPressedThisFrame ||
@@ -162,7 +195,8 @@ public class GameManager : MonoBehaviour
                         case GameConstants.mainMenuBtnPlayYText:
                             o.GetComponent<Button>().onClick.AddListener(delegate ()
                             {
-                                LoadSceneAsync(1);
+                                //LoadSceneAsync(1);
+                                StartCoroutine(LoadSceneAsyncWithFadeOut(GameConstants.sceneBenarraba));
                             });
                             break;
                         case GameConstants.mainMenuBtnControlsYText:
@@ -179,6 +213,11 @@ public class GameManager : MonoBehaviour
                             break;
                     }
                 }
+
+                GameObject.Find(GameConstants.mainMenuBtnControlsExit).GetComponent<Button>().onClick.AddListener(delegate ()
+                {
+                    HideControls();
+                });
                 break;
         }
     }
@@ -261,6 +300,8 @@ public class GameManager : MonoBehaviour
         pDialogs.enabled = false;
         inIntro = false;
 
+        AudioManager.Instance.PlayOnce(GameObject.FindAnyObjectByType<AudioSource>());
+
         yield return null;
     }
 
@@ -281,6 +322,7 @@ public class GameManager : MonoBehaviour
 
         present1.SetActive(true); present2.SetActive(true); present3.SetActive(true);
 
+        fadeOutAnimator.Play(GameConstants.benarrabaFadeOutBlack);
         StartCoroutine(GameConstants.FadeInOut(fadeOutAnimator, false));
 
         yield return new WaitForSecondsRealtime(1f);
@@ -291,6 +333,8 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(0.2f);
 
+        fadeInAnimator.enabled = true;
+        fadeInAnimator.Play(GameConstants.benarrabaFadeInBlack);
         StartCoroutine(GameConstants.FadeInOut(fadeInAnimator, true));
 
         yield return new WaitForSecondsRealtime(0.1f);
@@ -337,6 +381,30 @@ public class GameManager : MonoBehaviour
         fadeOutAnimator.enabled = true;
         fadeOutAnimator.Play(GameConstants.benarrabaFadeOutWhite);
 
+        yield return new WaitForSecondsRealtime(3f);
+
+        LoadSceneAsync(GameConstants.sceneCredits);
+
+        yield return null;
+    }
+    #endregion
+    #region Credits methods
+    private IEnumerator CreditsPerform()
+    {
+        yield return null;
+
+        StartCoroutine(GameConstants.FadeInOut(fadeInAnimatorCredits, false));
+
+        yield return new WaitForSecondsRealtime(1f);
+
+        while (!Keyboard.current.eKey.wasPressedThisFrame) yield return null;
+
+        StartCoroutine(GameConstants.FadeInOut(fadeOutAnimatorCredits, false));
+
+        yield return new WaitForSecondsRealtime(3f);
+
+        LoadSceneAsync(GameConstants.sceneMainMenu);
+
         yield return null;
     }
     #endregion
@@ -344,6 +412,14 @@ public class GameManager : MonoBehaviour
     private void ShowControls()
     {
         Debug.Log("Show controls");
+        menuPanel.SetActive(false);
+        menuPanelControls.SetActive(true);
+    }
+
+    private void HideControls()
+    {
+        menuPanel.SetActive(true);
+        menuPanelControls.SetActive(false);
     }
     #endregion
 }

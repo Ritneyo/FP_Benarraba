@@ -9,6 +9,7 @@ public static class GameConstants
     #region Scenes
     public const int sceneMainMenu = 0;
     public const int sceneBenarraba = 1;
+    public const int sceneCredits = 2;
     #endregion
     #region Layers
     public const string layerGround = "Ground";
@@ -18,6 +19,8 @@ public static class GameConstants
     public const string playerNameAndTag = "Player";
     #endregion
     #region MainMenu objects
+    public const string mainMenuBenarrabaMainMenuPanel = "MainMenuPanel";
+    public const string mainMenuBenarrabaControlsPanel = "ControlsPanel";
     public const string mainMenuBenarrabaImageBackgroundPanel = "BenarrabaImageBackgroundPanel";
     public const string mainMenuFreezeCameraImageBackgroundPanel = "CameraFreezePanel";
     public const string mainMenuTitleAndAnyPress = "Title&KeyPress";
@@ -25,6 +28,7 @@ public static class GameConstants
     public const string mainMenuBtnPlayYText = "BtnPlay&Text";
     public const string mainMenuBtnControlsYText = "BtnControls&Text";
     public const string mainMenuBtnExitYText = "BtnExit&Text";
+    public const string mainMenuBtnControlsExit = "BtnControlsExit";
     #endregion
     #region Benarraba objects
     //Objects
@@ -39,6 +43,8 @@ public static class GameConstants
     public const string benarrabaPDialog = "PDialog";
 
     //Animations
+    public const string benarrabaFadeInBlack = "FadeIn";
+    public const string benarrabaFadeOutBlack = "FadeOut";
     public const string benarrabaPDialogSpawn = "PDialog_spawn";
     public const string benarrabaPDialogDespawn = "PDialog_despawn";
     public const string benarrabaFadeOutWhite = "FadeOut_white";
@@ -56,9 +62,9 @@ public static class GameConstants
 
     //Magic kings outro texts
     public const string melchorText2 = "Gracias por haber encontrado el regalo. " +
-        "La estrella me ha guiado por un camino largo y lleno de dificultades, pero gracias a ti, el oro que llevaba para el niño ha vuelto a mi lado.";
+        "La estrella me ha guiado por un camino largo y lleno de dificultades, pero gracias a ti, el oro que llevaba ha vuelto a mi lado.";
     public const string gasparText2 = "Tienes mi profundo agradecimiento por haber encontrado el incienso. " +
-        "Esta Navidad, quiero que sepas que, gracias a tu esfuerzo, podremos llevar los regalos a los niños de todas partes.";
+        "Esta Navidad, quiero que sepas que, gracias a tu esfuerzo, podremos llevar los regalos a todas partes.";
     public const string baltasarText3 = "¡Gracias! Con tu ayuda tengo la mirra de vuelta en mis manos, y mi corazón rebosa de gratitud. " +
         "Tu esfuerzo ha hecho posible que mis regalos lleguen a su destino.";
     public const string todosText1 = "Desde lo profundo de nuestro ser, gracias y...";

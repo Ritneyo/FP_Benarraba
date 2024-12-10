@@ -11,5 +11,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Benarraba.unity
     guid: 09e320bd30daeff4ba4570d82db57446
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: da452f1dfa94ff04a91221baf5d4f06f
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 92888c67118331f44a8b1a5f43dd8312, type: 2}
