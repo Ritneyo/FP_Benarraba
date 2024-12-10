@@ -17,6 +17,8 @@ TagManager:
   - ContainerNPC
   - Props
   - Gossip
+  - Present
+  - Despawn
   layers:
   - Default
   - TransparentFX

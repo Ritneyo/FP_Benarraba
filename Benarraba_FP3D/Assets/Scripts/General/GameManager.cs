@@ -23,15 +23,29 @@ public class GameManager : MonoBehaviour
 
     [Header("Benarraba")]
     //Objects
+    private Transform playerTransform;
     private Animator baltasarAnimator;
     private Animator fadeInAnimator;
     private Animator fadeOutAnimator;
     private Animator pDialogs;
+    private GameObject present1;
+    private GameObject present2;
+    private GameObject present3;
+
+    //Checkpoint
+    public Vector3 dialogTransformPosition;
+    public Quaternion dialogTransformRotation;
+    public Quaternion dialogTransformCameraRotation;
+    public Vector3 checkpoint;
+
+    //Counters
+    public int presentsFound = 0;
 
     //States
     public bool inIntro;
     private bool inIntroStart;
     public bool inOutro;
+    public bool inOutroStart;
     #endregion
     #region Unity methods
     private void Awake()
@@ -53,6 +67,7 @@ public class GameManager : MonoBehaviour
         inIntro = false;
         inIntroStart = false;
         inOutro = false;
+        inOutroStart = false;
     }
 
     private void Start()
@@ -64,6 +79,7 @@ public class GameManager : MonoBehaviour
     {
         CheckIfAnyKeyPressed();
         Intro();
+        Outro();
     }
     #endregion
     #region SceneManager methods
@@ -170,11 +186,23 @@ public class GameManager : MonoBehaviour
     #region Benarraba methods
     private void BenarrabaSceneInstanceElements()
     {
-        GameObject.Find(GameConstants.playerNameAndTag);
+        playerTransform = GameObject.Find(GameConstants.playerNameAndTag).transform;
+        dialogTransformPosition = playerTransform.position;
+        dialogTransformRotation = playerTransform.rotation;
+        dialogTransformCameraRotation = playerTransform.GetChild(0).rotation;
+        checkpoint = dialogTransformPosition;
+
         fadeInAnimator = GameObject.Find(GameConstants.benarrabaFadeInPanel).GetComponent<Animator>();
-        //fadeOutAnimator = GameObject.Find(GameConstants.benarrabaFadeOutPanel).GetComponent<Animator>();
+        fadeOutAnimator = GameObject.Find(GameConstants.benarrabaFadeOutPanel).GetComponent<Animator>();
         pDialogs = GameObject.Find(GameConstants.benarrabaPDialog).GetComponent<Animator>();
         baltasarAnimator = GameObject.Find(GameConstants.benarrabaBaltasarName).GetComponent<Animator>();
+
+        present1 = GameObject.Find(GameConstants.benarrabaMelchorPresent);
+        present1.SetActive(false);
+        present2 = GameObject.Find(GameConstants.benarrabaGasparPresent);
+        present2.SetActive(false);
+        present3 = GameObject.Find(GameConstants.benarrabaBaltasarPresent);
+        present3.SetActive(false);
 
         inIntro = true;
     }
@@ -216,7 +244,7 @@ public class GameManager : MonoBehaviour
         while (!Keyboard.current.eKey.wasPressedThisFrame) yield return null;
 
         baltasarAnimator.enabled = false;
-        dialogText.text = $"Baltasar: {GameConstants.melchorText1}";
+        dialogText.text = $"Gaspar: {GameConstants.melchorText1}";
 
         yield return new WaitForSecondsRealtime(0.2f);
         while (!Keyboard.current.eKey.wasPressedThisFrame) yield return null;
@@ -232,6 +260,82 @@ public class GameManager : MonoBehaviour
 
         pDialogs.enabled = false;
         inIntro = false;
+
+        yield return null;
+    }
+
+    private void Outro()
+    {
+        if (presentsFound == 3 && !inOutroStart)
+        {
+            Debug.Log("Outro");
+            inOutroStart = true;
+            StartCoroutine(SpeechOutro());
+        }
+    }
+
+    private IEnumerator SpeechOutro()
+    {
+        yield return null;
+        inOutro = true;
+
+        present1.SetActive(true); present2.SetActive(true); present3.SetActive(true);
+
+        StartCoroutine(GameConstants.FadeInOut(fadeOutAnimator, false));
+
+        yield return new WaitForSecondsRealtime(1f);
+
+        playerTransform.position = dialogTransformPosition;
+        playerTransform.rotation = dialogTransformRotation;
+        playerTransform.GetChild(0).rotation = dialogTransformCameraRotation;
+
+        yield return new WaitForSecondsRealtime(0.2f);
+
+        StartCoroutine(GameConstants.FadeInOut(fadeInAnimator, true));
+
+        yield return new WaitForSecondsRealtime(0.1f);
+
+        fadeOutAnimator.GetComponent<Image>().color = Color.clear;
+        fadeOutAnimator.enabled = false;
+
+        yield return new WaitForSecondsRealtime(0.9f);
+
+        pDialogs.enabled = true;
+        pDialogs.Play(GameConstants.benarrabaPDialogSpawn, 0, 0);
+
+        yield return new WaitForSecondsRealtime(0.1f);
+        while (pDialogs.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.99f) yield return null;
+
+        TMP_Text dialogText = pDialogs.transform.GetChild(0).GetComponent<TMP_Text>();
+        dialogText.text = $"Melchor: {GameConstants.melchorText2}";
+
+        yield return new WaitForSecondsRealtime(0.2f);
+        while (!Keyboard.current.eKey.wasPressedThisFrame) yield return null;
+
+        dialogText.text = $"Gaspar: {GameConstants.gasparText2}";
+
+        yield return new WaitForSecondsRealtime(0.2f);
+        while (!Keyboard.current.eKey.wasPressedThisFrame) yield return null;
+
+        dialogText.text = $"Baltasar: {GameConstants.baltasarText3}";
+
+        yield return new WaitForSecondsRealtime(0.2f);
+        while (!Keyboard.current.eKey.wasPressedThisFrame) yield return null;
+
+        dialogText.text = $"Todos: {GameConstants.todosText1}";
+
+        yield return new WaitForSecondsRealtime(0.2f);
+        while (!Keyboard.current.eKey.wasPressedThisFrame) yield return null;
+
+        dialogText.alignment = TextAlignmentOptions.Center;
+        dialogText.fontSize = 36;
+        dialogText.text = $"{GameConstants.todosText2}";
+
+        yield return new WaitForSecondsRealtime(0.2f);
+        while (!Keyboard.current.eKey.wasPressedThisFrame) yield return null;
+
+        fadeOutAnimator.enabled = true;
+        fadeOutAnimator.Play(GameConstants.benarrabaFadeOutWhite);
 
         yield return null;
     }

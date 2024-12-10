@@ -33,15 +33,31 @@ public class PlayerMovement : MonoBehaviour
         GroundDetect();
         Move();
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Present"))
+        {
+            collision.gameObject.SetActive(false);
+            GameManager.Instance.presentsFound += 1;
+            if (GameManager.Instance.presentsFound == 2) GameManager.Instance.checkpoint = gameObject.transform.position;
+        }
+        else if (collision.gameObject.CompareTag("Despawn"))
+        {
+            Debug.Log("Collisiona");
+            rb.velocity = Vector3.zero;
+            gameObject.transform.position = GameManager.Instance.checkpoint;
+        }
+    }
     #endregion
     #region My methods
     public void GroundDetect()
     {
         if (GameConstants.GeneralDetectionUnique(groundDetection.transform.position, Vector3.down, 0.1f) ||
-            GameConstants.GeneralDetectionUnique(groundDetection.transform.position + Vector3.forward * 0.3f, Vector3.down, 0.1f) ||
-            GameConstants.GeneralDetectionUnique(groundDetection.transform.position + Vector3.back * 0.3f, Vector3.down, 0.1f) ||
-            GameConstants.GeneralDetectionUnique(groundDetection.transform.position + Vector3.right * 0.3f, Vector3.down, 0.1f) ||
-            GameConstants.GeneralDetectionUnique(groundDetection.transform.position + Vector3.left * 0.3f, Vector3.down, 0.1f))
+            GameConstants.GeneralDetectionUnique(groundDetection.transform.position + Vector3.forward * 0.3f, Vector3.down, 0.5f) ||
+            GameConstants.GeneralDetectionUnique(groundDetection.transform.position + Vector3.back * 0.3f, Vector3.down, 0.5f) ||
+            GameConstants.GeneralDetectionUnique(groundDetection.transform.position + Vector3.right * 0.3f, Vector3.down, 0.5f) ||
+            GameConstants.GeneralDetectionUnique(groundDetection.transform.position + Vector3.left * 0.3f, Vector3.down, 0.5f))
             isGrounded = true;
         else isGrounded = false;
     }
