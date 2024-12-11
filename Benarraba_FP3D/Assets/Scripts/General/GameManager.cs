@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     private GameObject present1;
     private GameObject present2;
     private GameObject present3;
+    private GameObject pauseMenu;
 
     //Checkpoint
     public Vector3 dialogTransformPosition;
@@ -89,6 +90,23 @@ public class GameManager : MonoBehaviour
         CheckIfAnyKeyPressedMinMenu();
         Intro();
         Outro();
+
+        if (SceneManager.GetActiveScene().buildIndex == GameConstants.sceneBenarraba && Keyboard.current.pKey.wasPressedThisFrame)
+        {
+            if (!pauseMenu.activeInHierarchy)
+            {
+                pauseMenu.SetActive(true);
+            }
+            else
+            {
+                pauseMenu.SetActive(false);
+            }
+        }
+
+        if (SceneManager.GetActiveScene().buildIndex == GameConstants.sceneBenarraba && Keyboard.current.iKey.wasPressedThisFrame)
+        {
+            LoadSceneAsync(GameConstants.sceneMainMenu);
+        }
     }
     #endregion
     #region SceneManager methods
@@ -235,6 +253,9 @@ public class GameManager : MonoBehaviour
         fadeOutAnimator = GameObject.Find(GameConstants.benarrabaFadeOutPanel).GetComponent<Animator>();
         pDialogs = GameObject.Find(GameConstants.benarrabaPDialog).GetComponent<Animator>();
         baltasarAnimator = GameObject.Find(GameConstants.benarrabaBaltasarName).GetComponent<Animator>();
+
+        pauseMenu = GameObject.Find("PauseMenu");
+        pauseMenu.SetActive(false);
 
         present1 = GameObject.Find(GameConstants.benarrabaMelchorPresent);
         present1.SetActive(false);
