@@ -624,6 +624,7 @@ GameObject:
   - component: {fileID: 527046461}
   - component: {fileID: 527046463}
   - component: {fileID: 527046462}
+  - component: {fileID: 527046464}
   m_Layer: 5
   m_Name: MainMenuPanel
   m_TagString: Untagged
@@ -690,6 +691,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 527046460}
   m_CullTransparentMesh: 1
+--- !u!114 &527046464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527046460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 892be80f2f25ff145bdb928753207696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &638589590
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2391,8 +2404,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 8ec8a0b25445e16438d6501f90d53ba3, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2531,7 +2544,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0632e92eddd49ed4c8b6d5e35df25c0a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8ec8a0b25445e16438d6501f90d53ba3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

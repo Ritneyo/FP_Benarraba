@@ -32,6 +32,8 @@ public class PlayerMovement : MonoBehaviour
     {
         GroundDetect();
         Move();
+
+        if (Keyboard.current.rKey.wasPressedThisFrame) gameObject.transform.position = GameManager.Instance.checkpoint + Vector3.up;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -46,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("Collisiona");
             rb.velocity = Vector3.zero;
-            gameObject.transform.position = GameManager.Instance.checkpoint;
+            gameObject.transform.position = GameManager.Instance.checkpoint + Vector3.up;
         }
     }
     #endregion

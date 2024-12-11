@@ -80,11 +80,6 @@ public class GameManager : MonoBehaviour
         inOutroStart = false;
     }
 
-    private void Start()
-    {
-        //Cursor.visible = false;
-    }
-
     private void Update()
     {
         CheckIfAnyKeyPressedMinMenu();
@@ -104,24 +99,19 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (Keyboard.current.iKey.wasPressedThisFrame) LoadSceneAsync(GameConstants.sceneMainMenu);
+        if (Keyboard.current.iKey.wasPressedThisFrame) SceneManager.LoadScene(GameConstants.sceneMainMenu);
     }
     #endregion
     #region SceneManager methods
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log($"La escena {scene.name} ha terminado de cargar");
         CheckWhatSceneIsLoaded(scene);
 
         if (AudioManager.Instance != null) AudioManager.Instance.GetSources();
     }
-
-    private void LoadSceneAsync(int sceneIndex)
-    {
-        SceneManager.LoadScene(sceneIndex);
-    }
     
-    private IEnumerator LoadSceneAsyncWithFadeOut(int sceneIndex)
+    IEnumerator LoadSceneAsyncWithFadeOut(int sceneIndex)
     {
         yield return null;
 
@@ -133,11 +123,14 @@ public class GameManager : MonoBehaviour
     }
     #endregion
     #region Checking methods
-    private void CheckWhatSceneIsLoaded(Scene scene)
+    void CheckWhatSceneIsLoaded(Scene scene)
     {
         switch (scene.buildIndex)
         {
             case GameConstants.sceneMainMenu:
+                if (menuPanelControls) menuPanelControls.SetActive(true);
+                Cursor.visible = true;
+                presentsFound = 0;
                 CheckButtonListeners(SceneManager.GetActiveScene().buildIndex);
                 menuPanel = GameObject.Find(GameConstants.mainMenuBenarrabaMainMenuPanel);
                 menuPanelControls = GameObject.Find(GameConstants.mainMenuBenarrabaControlsPanel);
@@ -159,7 +152,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void CheckIfAnyKeyPressedMinMenu()
+    void CheckIfAnyKeyPressedMinMenu()
     {
         if (!anyPressed && SceneManager.GetActiveScene().buildIndex == GameConstants.sceneMainMenu &&
             (Keyboard.current.anyKey.wasPressedThisFrame ||
@@ -175,13 +168,13 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Sale del juego
     /// </summary>
-    private void GameExit()
+    void GameExit()
     {
         Debug.Log("Application quit");
         Application.Quit();
     }
 
-    private IEnumerator MoveUIElements()
+    IEnumerator MoveUIElements()
     {
         yield return null;
 
@@ -198,7 +191,7 @@ public class GameManager : MonoBehaviour
         yield return null;
     }
 
-    private void CheckButtonListeners(int sceneIndex)
+    void CheckButtonListeners(int sceneIndex)
     {
         switch (sceneIndex)
         {
@@ -230,16 +223,32 @@ public class GameManager : MonoBehaviour
                     }
                 }
 
-                GameObject.Find(GameConstants.mainMenuBtnControlsExit).GetComponent<Button>().onClick.AddListener(delegate ()
-                {
-                    HideControls();
-                });
+                StartCoroutine(Buscar());
                 break;
         }
     }
+
+    IEnumerator Buscar()
+    {
+        yield return null;
+
+        while (!GameObject.Find(GameConstants.mainMenuBtnControlsExit))
+        {
+            Debug.Log("No encuentra");
+            yield return null;
+        }
+
+        GameObject.Find(GameConstants.mainMenuBtnControlsExit).GetComponent<Button>().onClick.AddListener(delegate ()
+        {
+            HideControls();
+        });
+
+        yield return null;
+    }
+
     #endregion
     #region Benarraba methods
-    private void BenarrabaSceneInstanceElements()
+    void BenarrabaSceneInstanceElements()
     {
         playerTransform = GameObject.Find(GameConstants.playerNameAndTag).transform;
         dialogTransformPosition = playerTransform.position;
@@ -274,7 +283,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator SpeechIntro()
+    IEnumerator SpeechIntro()
     {
         yield return null;
 
@@ -324,7 +333,7 @@ public class GameManager : MonoBehaviour
         yield return null;
     }
 
-    private void Outro()
+    void Outro()
     {
         if (presentsFound == 3 && !inOutroStart)
         {
@@ -334,7 +343,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator SpeechOutro()
+    IEnumerator SpeechOutro()
     {
         yield return null;
         inOutro = true;
@@ -402,13 +411,14 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(3f);
 
-        LoadSceneAsync(GameConstants.sceneCredits);
+        SceneManager.LoadScene(GameConstants.sceneCredits);
 
         yield return null;
     }
     #endregion
+
     #region Credits methods
-    private IEnumerator CreditsPerform()
+    IEnumerator CreditsPerform()
     {
         yield return null;
 
@@ -422,20 +432,21 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(3f);
 
-        LoadSceneAsync(GameConstants.sceneMainMenu);
+        SceneManager.LoadScene(GameConstants.sceneMainMenu);
 
         yield return null;
     }
     #endregion
+
     #region UI methods
-    private void ShowControls()
+    void ShowControls()
     {
         Debug.Log("Show controls");
         menuPanel.SetActive(false);
         menuPanelControls.SetActive(true);
     }
 
-    private void HideControls()
+    void HideControls()
     {
         menuPanel.SetActive(true);
         menuPanelControls.SetActive(false);
