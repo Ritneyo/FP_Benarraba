@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
         {
             collision.gameObject.SetActive(false);
             GameManager.Instance.presentsFound += 1;
-            if (GameManager.Instance.presentsFound == 2) GameManager.Instance.checkpoint = gameObject.transform.position;
+            GameManager.Instance.checkpoint = gameObject.transform.position;
         }
         else if (collision.gameObject.CompareTag("Despawn"))
         {
