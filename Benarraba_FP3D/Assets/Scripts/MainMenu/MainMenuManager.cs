@@ -24,6 +24,7 @@ public class MainMenuManager : MonoBehaviour
     private void Start()
     {
         fadeOut.SetActive(false);
+        CheckIfExist();
     }
 
     public void SetButtonsMethods()
@@ -67,9 +68,15 @@ public class MainMenuManager : MonoBehaviour
         }
     }
 
+
     void CheckIfAudioSourceExist()
     {
         if (GameObject.FindAnyObjectByType<AudioSource>()) Debug.Log("Audio source exist");
         else Debug.Log("Audio source not exist");
+
+    void CheckIfExist()
+    {
+        if (GameObject.Find("Player")) Debug.Log("Player exist");
+        else Debug.Log("Player not exist");
     }
 }
