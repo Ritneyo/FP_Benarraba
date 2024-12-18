@@ -24,6 +24,7 @@ public class MainMenuManager : MonoBehaviour
     private void Start()
     {
         fadeOut.SetActive(false);
+        CheckIfExist();
     }
 
     public void SetButtonsMethods()
@@ -65,5 +66,11 @@ public class MainMenuManager : MonoBehaviour
             menuMain.SetActive(true);
             menuPanelControls.SetActive(false);
         }
+    }
+
+    void CheckIfExist()
+    {
+        if (GameObject.Find("Player")) Debug.Log("Player exist");
+        else Debug.Log("Player not exist");
     }
 }
