@@ -66,4 +66,10 @@ public class MainMenuManager : MonoBehaviour
             menuPanelControls.SetActive(false);
         }
     }
+
+    void CheckIfAudioSourceExist()
+    {
+        if (GameObject.FindAnyObjectByType<AudioSource>()) Debug.Log("Audio source exist");
+        else Debug.Log("Audio source not exist");
+    }
 }
